@@ -138,5 +138,43 @@ namespace Standard.Api.Controllers
                 return InternalServerError(weatherForecastServiceException);
             }
         }
+
+        [HttpDelete("{weatherForecastId}")]
+        public async ValueTask<ActionResult<WeatherForecast>> DeleteWeatherForecastByIdAsync(Guid weatherForecastId)
+        {
+            try
+            {
+                WeatherForecast deletedWeatherForecast =
+                    await this.weatherForecastService.RemoveWeatherForecastByIdAsync(weatherForecastId);
+
+                return Ok(deletedWeatherForecast);
+            }
+            catch (WeatherForecastValidationException weatherForecastValidationException)
+                when (weatherForecastValidationException.InnerException is NotFoundWeatherForecastException)
+            {
+                return NotFound(weatherForecastValidationException.InnerException);
+            }
+            catch (WeatherForecastValidationException weatherForecastValidationException)
+            {
+                return BadRequest(weatherForecastValidationException.InnerException);
+            }
+            catch (WeatherForecastDependencyValidationException weatherForecastDependencyValidationException)
+                when (weatherForecastDependencyValidationException.InnerException is LockedWeatherForecastException)
+            {
+                return Locked(weatherForecastDependencyValidationException.InnerException);
+            }
+            catch (WeatherForecastDependencyValidationException weatherForecastDependencyValidationException)
+            {
+                return BadRequest(weatherForecastDependencyValidationException);
+            }
+            catch (WeatherForecastDependencyException weatherForecastDependencyException)
+            {
+                return InternalServerError(weatherForecastDependencyException);
+            }
+            catch (WeatherForecastServiceException weatherForecastServiceException)
+            {
+                return InternalServerError(weatherForecastServiceException);
+            }
+        }
     }
 }
