@@ -99,5 +99,44 @@ namespace Standard.Api.Controllers
                 return InternalServerError(weatherForecastServiceException);
             }
         }
+
+        [HttpPut]
+        public async ValueTask<ActionResult<WeatherForecast>> PutWeatherForecastAsync(WeatherForecast weatherForecast)
+        {
+            try
+            {
+                WeatherForecast modifiedWeatherForecast =
+                    await this.weatherForecastService.ModifyWeatherForecastAsync(weatherForecast);
+
+                return Ok(modifiedWeatherForecast);
+            }
+            catch (WeatherForecastValidationException weatherForecastValidationException)
+                when (weatherForecastValidationException.InnerException is NotFoundWeatherForecastException)
+            {
+                return NotFound(weatherForecastValidationException.InnerException);
+            }
+            catch (WeatherForecastValidationException weatherForecastValidationException)
+            {
+                return BadRequest(weatherForecastValidationException.InnerException);
+            }
+            catch (WeatherForecastDependencyValidationException weatherForecastValidationException)
+                when (weatherForecastValidationException.InnerException is InvalidWeatherForecastReferenceException)
+            {
+                return FailedDependency(weatherForecastValidationException.InnerException);
+            }
+            catch (WeatherForecastDependencyValidationException weatherForecastDependencyValidationException)
+               when (weatherForecastDependencyValidationException.InnerException is AlreadyExistsWeatherForecastException)
+            {
+                return Conflict(weatherForecastDependencyValidationException.InnerException);
+            }
+            catch (WeatherForecastDependencyException weatherForecastDependencyException)
+            {
+                return InternalServerError(weatherForecastDependencyException);
+            }
+            catch (WeatherForecastServiceException weatherForecastServiceException)
+            {
+                return InternalServerError(weatherForecastServiceException);
+            }
+        }
     }
 }
