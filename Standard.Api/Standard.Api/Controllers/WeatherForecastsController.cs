@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
@@ -39,6 +40,26 @@ namespace Standard.Api.Controllers
                when (weatherForecastDependencyValidationException.InnerException is AlreadyExistsWeatherForecastException)
             {
                 return Conflict(weatherForecastDependencyValidationException.InnerException);
+            }
+            catch (WeatherForecastDependencyException weatherForecastDependencyException)
+            {
+                return InternalServerError(weatherForecastDependencyException);
+            }
+            catch (WeatherForecastServiceException weatherForecastServiceException)
+            {
+                return InternalServerError(weatherForecastServiceException);
+            }
+        }
+
+        [HttpGet]
+        public ActionResult<IQueryable<WeatherForecast>> GetAllWeatherForecasts()
+        {
+            try
+            {
+                IQueryable<WeatherForecast> retrievedWeatherForecasts =
+                    this.weatherForecastService.RetrieveAllWeatherForecasts();
+
+                return Ok(retrievedWeatherForecasts);
             }
             catch (WeatherForecastDependencyException weatherForecastDependencyException)
             {
