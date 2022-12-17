@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -60,6 +61,34 @@ namespace Standard.Api.Controllers
                     this.weatherForecastService.RetrieveAllWeatherForecasts();
 
                 return Ok(retrievedWeatherForecasts);
+            }
+            catch (WeatherForecastDependencyException weatherForecastDependencyException)
+            {
+                return InternalServerError(weatherForecastDependencyException);
+            }
+            catch (WeatherForecastServiceException weatherForecastServiceException)
+            {
+                return InternalServerError(weatherForecastServiceException);
+            }
+        }
+
+        [HttpGet("{weatherForecastId}")]
+        public async ValueTask<ActionResult<WeatherForecast>> GetWeatherForecastByIdAsync(Guid weatherForecastId)
+        {
+            try
+            {
+                WeatherForecast weatherForecast = await this.weatherForecastService.RetrieveWeatherForecastByIdAsync(weatherForecastId);
+
+                return Ok(weatherForecast);
+            }
+            catch (WeatherForecastValidationException weatherForecastValidationException)
+                when (weatherForecastValidationException.InnerException is NotFoundWeatherForecastException)
+            {
+                return NotFound(weatherForecastValidationException.InnerException);
+            }
+            catch (WeatherForecastValidationException weatherForecastValidationException)
+            {
+                return BadRequest(weatherForecastValidationException.InnerException);
             }
             catch (WeatherForecastDependencyException weatherForecastDependencyException)
             {
