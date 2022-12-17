@@ -8,5 +8,6 @@ namespace Standard.Api.Brokers.Storages
     public partial interface IStorageBroker
     {
         ValueTask<WeatherForecast> InsertWeatherForecastAsync(WeatherForecast weatherForecast);
+        IQueryable<WeatherForecast> SelectAllWeatherForecasts();
     }
 }
