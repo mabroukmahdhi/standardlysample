@@ -1,4 +1,4 @@
-namespace Standard.Api
+namespace Standard.Api.Models.WeatherForecasts
 {
     public class WeatherForecast
     {
