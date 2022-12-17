@@ -21,5 +21,8 @@ namespace Standard.Api.Brokers.Storages
 
         public async ValueTask<WeatherForecast> UpdateWeatherForecastAsync(WeatherForecast weatherForecast) =>
             await UpdateAsync(weatherForecast);
+
+        public async ValueTask<WeatherForecast> DeleteWeatherForecastAsync(WeatherForecast weatherForecast) =>
+            await DeleteAsync(weatherForecast);
     }
 }
