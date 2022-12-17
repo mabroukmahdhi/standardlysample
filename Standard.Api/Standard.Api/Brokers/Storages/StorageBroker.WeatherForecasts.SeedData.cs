@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Standard.Api.Models.WeatherForecasts;
 
 namespace Standard.Api.Brokers.Storages
 {

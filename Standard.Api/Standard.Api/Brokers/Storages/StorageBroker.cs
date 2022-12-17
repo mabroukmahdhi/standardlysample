@@ -1,8 +1,5 @@
-using System.Linq;
-using System.Threading.Tasks;
 using EFxceptions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace Standard.Api.Brokers.Storages
 {
@@ -24,7 +21,7 @@ namespace Standard.Api.Brokers.Storages
         }
 
         private static void AddConfigurations(ModelBuilder modelBuilder)
-        { 
+        {
             // TODO: Add your fluent configurations here i.e. AddWeatherForecastConfigurations(modelBuilder);
         }
 
