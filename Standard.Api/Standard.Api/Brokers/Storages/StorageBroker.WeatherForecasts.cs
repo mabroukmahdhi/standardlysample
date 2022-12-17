@@ -18,5 +18,8 @@ namespace Standard.Api.Brokers.Storages
 
         public async ValueTask<WeatherForecast> SelectWeatherForecastByIdAsync(Guid weatherForecastId) =>
             await SelectAsync<WeatherForecast>(weatherForecastId);
+
+        public async ValueTask<WeatherForecast> UpdateWeatherForecastAsync(WeatherForecast weatherForecast) =>
+            await UpdateAsync(weatherForecast);
     }
 }

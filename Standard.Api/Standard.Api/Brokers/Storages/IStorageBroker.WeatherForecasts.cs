@@ -10,5 +10,6 @@ namespace Standard.Api.Brokers.Storages
         ValueTask<WeatherForecast> InsertWeatherForecastAsync(WeatherForecast weatherForecast);
         IQueryable<WeatherForecast> SelectAllWeatherForecasts();
         ValueTask<WeatherForecast> SelectWeatherForecastByIdAsync(Guid weatherForecastId);
+        ValueTask<WeatherForecast> UpdateWeatherForecastAsync(WeatherForecast weatherForecast);
     }
 }
